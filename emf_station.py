@@ -1,115 +1,36 @@
 from gpiozero import Button
-import bme280_sensor
 import datetime
 import emf
 import logging
 import math
 import os
-import pyranometer
 from pathlib import Path
+#import serial
+#import pynmea2
 import statistics
 import subprocess
 import sys
 import time
-import wind_direction
 
 # How often the sensor readings should be logged
-LOG_INTERVAL = 900 # 15 Minutes in seconds
+LOG_INTERVAL = 15 # seconds
 
 # How often readings should be taken to form the average that will be logged
-ACCUMULATION_INTERVAL = 10 # 10 seconds
-
-
-###############################################################################
-# Anemometer
-###############################################################################
-
-CM_IN_A_MILE = 160934.4
-SECS_IN_AN_HOUR = 3600
-# Calibration factor used to report the correct wind speed
-WIND_CALIBRATION = 2.3589722140805094
-RADIUS_CM = 9.0 # Radius of the anemometer
-
-wind_speed_sensor = Button(5) # BCM 5
-wind_count = 0        # Number of half rotations for calculating wind speed
-store_speeds = []     # Store speeds in order to record wind gusts
-store_directions = [] # Store directions to calculate the avg direction
-
-def reset_wind():
-    global wind_count
-    wind_count = 0
-
-def spin():
-    global wind_count
-    wind_count = wind_count + 1
-
-def calculate_speed(time_sec):
-    logging.log("Calculating the wind speed")
-    global wind_count
-    circumference_cm = (2 * math.pi) * RADIUS_CM
-    rotations = wind_count / 2.0
-
-    # Calculate the distance travelled by a cup in cm
-    dist_mile = (circumference_cm * rotations) / CM_IN_A_MILE
-
-    # Report the wind speed in miles per hour
-    miles_per_sec = dist_mile / time_sec
-    miles_per_hour = miles_per_sec * SECS_IN_AN_HOUR
-
-    # Clear the wind count so it will be ready for the next reading
-    reset_wind()
-
-    # The anemometer data sheet indicates that if the switch closes once per
-    # second, a wind speed of 1.492 MPH should be reported
-    # Multiply by the calibration factor to be accurate according to the
-    # data sheet
-    return miles_per_hour * WIND_CALIBRATION
-
-
-# Call the spin function every half rotation
-wind_speed_sensor.when_pressed = spin
-
-
-###############################################################################
-# Rain Gauge
-###############################################################################
-
-BUCKET_SIZE = 0.011 # Inches per bucket tip
-
-previous_day = datetime.datetime.now()
-
-rain_sensor = Button(6)
-rain_count = 0
-precipitation = 0.0
-
-def bucket_tipped():
-    logging.log("Detected a rainfall bucket tip")
-    global rain_count
-    global precipitation
-    rain_count = rain_count + 1
-    precipitation = round(rain_count * BUCKET_SIZE, 4)
-
-def reset_rainfall():
-    logging.log("Resetting the accumulated rainfall")
-    global rain_count
-    global precipitation
-    rain_count = 0
-    precipitation = 0.0
-
-rain_sensor.when_pressed = bucket_tipped
-
-
-###############################################################################
-# Main Program Loop
-###############################################################################
+ACCUMULATION_INTERVAL = 3 # seconds
 
 # Create a new file named by the current date and time
 time_name = datetime.datetime.now().strftime("%m-%d-%Y--%H-%M-%S")
-data_file = "/home/pi/WeatherStation" + "/" +  "data" + "/" + time_name + ".csv"
+data_file = "/home/pi/EMFSensingStation" + "/" +  "data" + "/" + time_name + ".csv"
 
-logging.initialize_logger(f"/home/pi/WeatherStation/logs/{time_name}.log")
+logging.initialize_logger(f"/home/pi/EMFSensingStation/logs/{time_name}.log")
 
-logging.log("The weather and emf sensing station has been started")
+# Set up the GPS serial port connection
+#logging.log("Setting up the GPS module serial communication")
+#port = "/dev/ttyAMA0"
+#ser = serial.Serial(port, baudrate=9600, timeout=0.5)
+#dataout = pynmea2.NMEAStreamReader()
+
+logging.log("The EMF sensing station has been started")
 logging.log(f"Readings will be accumulated every {ACCUMULATION_INTERVAL} seconds")
 logging.log(f"The data will be written every {LOG_INTERVAL} seconds")
 logging.log(f"The data file is located here: {data_file}")
@@ -126,15 +47,8 @@ try:
         # Write the labels row
         file.write("Record Number, " \
                    "Time, " \
-                   "Temperature (F), " \
-                   "Pressure (mbar), " \
-                   "Humidity (%), " \
-                   "Wind Direction (Degrees), " \
-                   "Wind Direction (String), " \
-                   "Wind Speed (MPH), " \
-                   "Wind Gust (MPH), " \
-                   "Precipitation (Inches), " \
-                   "Shortwave Radiation (W m^(-2)), " \
+                   "Latitude, " \
+                   "Longitude, " \
                    "Avg. RF Watts (W), " \
                    "Avg. RF Watts Frequency (MHz), " \
                    "Peak RF Watts (W), " \
@@ -162,8 +76,6 @@ try:
     while True:
         start_time = time.time()
     
-        store_directions = []
-        store_speeds = []
         store_rf_watts = []
         store_rf_watts_frequencies = []
         store_rf_density = []
@@ -179,15 +91,10 @@ try:
         ef_volts_per_meter = 0.0
         emf_milligauss = 0.0
     
-        # Accumulate wind direction and wind speeds every ACCUMULATION_INTERVAL
-        # seconds, and log the averages every LOG_INTERVAL
         logging.log("Accumulating the sensor readings")
         while time.time() - start_time <= LOG_INTERVAL:
             bad_values = False
 
-            store_directions.append(wind_direction.get_current_angle())
-            store_speeds.append(calculate_speed(ACCUMULATION_INTERVAL))
-            
             try:
                 rf_watts, rf_watts_mhz_frequency, rf_density, rf_density_frequency, rf_total_density, ef_volts_per_meter, emf_milligauss = emf.get_emf()
             except Exception as e:
@@ -217,22 +124,6 @@ try:
             store_ef_volts_per_meter.append(-1)
             store_emf_milligauss.append(-1)
 
-        # Obtain the wind gust and the average speed over the LOG_INTERVAL 
-        wind_gust = round(max(store_speeds), 1)
-        wind_speed = round(statistics.mean(store_speeds), 1)
-    
-        # Obtain the average wind direction over the LOG_INTERVAL 
-        wind_direction_avg = round(wind_direction.get_average(store_directions), 1)
-        wind_direction_string = wind_direction.get_direction_as_string(wind_direction_avg)
-    
-        # Obtain the current humidity, pressure, and ambient temperature
-        logging.log("Obtaining the humidity, pressure, and temperature readings from the bme280 sensor")
-        humidity, pressure, ambient_temp = bme280_sensor.read_all()
-    
-        # Obtain the current shortwave radiation
-        logging.log("Obtaining the shortwave radiation value from the pyranometer")
-        shortwave_radiation = pyranometer.get_shortwave_radiation()
-   
         logging.log("Calculating the max, peak, and averages of the EMF data")
     
         # Obtain the max RF watts value and its associated frequency
@@ -274,7 +165,20 @@ try:
         # Obtain the average and max EMF values
         emf_milligauss_avg = round(statistics.mean(store_emf_milligauss), 1)
         emf_milligauss_max = round(max(store_emf_milligauss), 1)
-    
+   
+        # Obtain the current location from the GPS sensor
+        # GPGGA, time, latitude, longitude, fix quality, number of satellites, horizontal dilution of precision, altitude, height of geoid above WGS84 ellipsoid, time since last DGPS update, DGPS reference station id, checksum
+        #logging.log("Reading the GPS data") 
+        #gps_data = ser.readline()
+        #if gps_data[0:6] == '$GPGGA':
+        #    msg = pynmea2.parse(gps_data)
+        #    latitude = str(msg.latitude)
+        #    longitude = str(msg.longitude)
+
+        # TODO: Remove this when the GPS module is integrated
+        latitude = 25.000000
+        longitude = -71.000000
+
         # This will pull from the Real Time Clock so it can be accurate
         # when there isn't an internet connection. See the readme for
         # instructions on how to configure the Real Time Clock correctly.
@@ -284,18 +188,11 @@ try:
     
         print(f"Record Number:                                 {record_number}")
         print(f"Time:                                          {current_time}")
-    
-        # Weather
-        print(f"Temperature (F):                               {ambient_temp}")
-        print(f"Pressure (mbar):                               {pressure}")
-        print(f"Humidity (%):                                  {humidity}")
-        print(f"Wind Direction (Degrees):                      {wind_direction_avg}")
-        print(f"Wind Direction (String):                       {wind_direction_string}")
-        print(f"Avg. Wind Speed (MPH):                         {wind_speed}")
-        print(f"Wind Gust (MPH):                               {wind_gust}")
-        print(f"Precipitation (Inches):                        {precipitation}")
-        print(f"Shortwave Radiation (W m^-2):                  {shortwave_radiation}")
-    
+        
+        # GPS Coordinates
+        print(f"Latitude:                                      {latitude}")
+        print(f"Longitude:                                     {longitude}")
+
         # RF Watts
         print(f"Avg. RF Watts (W):                             {rf_watts_avg:.16f}")
         print(f"Avg. RF Watts Frequency (MHz):                 {rf_watts_frequency_avg}")
@@ -330,10 +227,9 @@ try:
     
         # Log the data by appending the values to the data .csv file
         with open(data_file, "a") as file:
-            file.write(f"{record_number}, {current_time}, {ambient_temp}, {pressure}, " \
-                       f"{humidity}, {wind_direction_avg}, {wind_direction_string}, " \
-                       f"{wind_speed}, {wind_gust}, {precipitation}, " \
-                       f"{shortwave_radiation}, {rf_watts_avg:.16f}, {rf_watts_frequency_avg}, " \
+            file.write(f"{record_number}, {current_time}, " \
+                       f"{latitude}, {longitude}, " \
+                       f"{rf_watts_avg:.16f}, {rf_watts_frequency_avg}, " \
                        f"{rf_watts_peak:.16f}, {frequency_of_rf_watts_peak}, " \
                        f"{rf_watts_frequency_peak}, {watts_of_rf_watts_frequency_peak:.16f}, " \
                        f"{rf_density_avg:.16f}, {rf_density_frequency_avg}, " \
@@ -378,8 +274,6 @@ try:
             logging.log("WARNING: The data is not being backed up. Ensure an external storage device is connected.")
     
         # Clear the recorded values so they can be updated over the next LOG_INTERVAL
-        store_speeds.clear()
-        store_directions.clear()
         store_rf_watts.clear()
         store_rf_watts_frequencies.clear() 
         store_rf_density.clear()
@@ -387,13 +281,6 @@ try:
         store_rf_total_density.clear()
         store_ef_volts_per_meter.clear()
         store_emf_milligauss.clear()
-    
-        # Clear the rainfall each day at midnight
-        # When it's a new weekday, clear the rainfall total
-        if int(current_time.strftime("%w")) != int(previous_day.strftime("%w")):
-            print("Resetting the accumulated rainfall")
-            reset_rainfall()
-            previous_day = current_time
     
         record_number = record_number + 1
 
