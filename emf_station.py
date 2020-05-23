@@ -1,4 +1,3 @@
-from gpiozero import Button
 import datetime
 import emf
 import logging
