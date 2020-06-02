@@ -48,7 +48,9 @@ can be done by running `sudo reboot`.
 
 The Raspberry Pi can't keep accurate time when it's disconnected from the
 internet. For this reason, we use a Real Time Clock (RTC) module. We've
-chosen to use the ChronoDot 2.1.
+chosen to use the ChronoDot 2.1. Note that the `install.sh` script will
+configure the Pi to use the Real Time Clock. For completeness, the steps
+performed are documented below.
 
 The following location provides a nice tutorial for setting up the Raspberry Pi
 to use the RTC:
@@ -133,7 +135,8 @@ git clone https://github.com/lightningWhite/EMFSensingStation.git
 
 The project requires Python 3 to be installed. 
 
-Once this repository is cloned, perform the following steps:
+Once this repository is cloned, perform the following steps in the repository
+directory:
 
 Create a python virtual environment and activate it:
 
@@ -161,7 +164,8 @@ so the EMF station will start on boot automatically. It will also create a
 mount point and modify the fstab so an external USB storage device will be
 automatically mounted on boot. It will also configure the Pi to automatically
 connect to a network named `EMF` if present. This can be helpful if you want
-to connect to the Pi wirelessly using a mobile hotspot. This script must be run
+to connect to the Pi wirelessly using a mobile hotspot. The script will also
+configure the Pi to use the Real Time Clock for time. This script must be run
 as root and the Pi must be restarted for the changes to take effect:
 
 ```
@@ -213,7 +217,7 @@ sensor in order to calculate and averages or maximums. The
 ACCUMULATION_INTERVAL should be less than the LOG_INTERVAL.
 
 A data file will be created every time the EMF station is started and it
-will be saved to `/home/pi/EMFStation/data` and be named the date and time
+will be saved to `/home/pi/EMFSensingStation/data` and be named the date and time
 of when it was created.
 
 The CSV file will grow at a rate of around 4 Kilobytes for every 13 entries.

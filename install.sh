@@ -24,6 +24,12 @@ echo "/dev/sda1 /mnt/usb1 vfat uid=pi,gid=pi,umask=0022,sync,auto,nofail,nosuid,
 echo "Setting up a default network to which the Pi should attempt to connect if present..."
 printf 'network={\n\tssid="Weather"\n\tpsk="weatherStationNetwork"\n\tkey_mgmt=WPA-PSK\n\tpriority=20\n}\n' >> /etc/wpa_supplicant/wpa_supplicant.conf
 
+echo "Configuring the Pi to synchronize with the Real Time Clock..."
+# Delete the last line of the file containing 'exit 0'
+sed -i '/exit/d' /etc/rc.local
+# Place the following at the end of the file followed by exit 0
+printf 'echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device\nhwclock -s\nexit 0' >> /etc/rc.local
+
 echo ""
 
 echo "The EMF sensing station has been installed!"

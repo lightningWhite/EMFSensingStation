@@ -1,6 +1,6 @@
 import datetime
 import emf
-import logging
+import logger as logging
 import math
 import os
 from pathlib import Path
