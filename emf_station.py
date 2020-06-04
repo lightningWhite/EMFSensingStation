@@ -1,11 +1,9 @@
 import datetime
 import emf
-import logging
+import logger as logging
 import math
 import os
 from pathlib import Path
-#import serial
-#import pynmea2
 import statistics
 import subprocess
 import sys
@@ -22,12 +20,6 @@ time_name = datetime.datetime.now().strftime("%m-%d-%Y--%H-%M-%S")
 data_file = "/home/pi/EMFSensingStation" + "/" +  "data" + "/" + time_name + ".csv"
 
 logging.initialize_logger(f"/home/pi/EMFSensingStation/logs/{time_name}.log")
-
-# Set up the GPS serial port connection
-#logging.log("Setting up the GPS module serial communication")
-#port = "/dev/ttyAMA0"
-#ser = serial.Serial(port, baudrate=9600, timeout=0.5)
-#dataout = pynmea2.NMEAStreamReader()
 
 logging.log("The EMF sensing station has been started")
 logging.log(f"Readings will be accumulated every {ACCUMULATION_INTERVAL} seconds")
@@ -164,19 +156,9 @@ try:
         # Obtain the average and max EMF values
         emf_milligauss_avg = round(statistics.mean(store_emf_milligauss), 1)
         emf_milligauss_max = round(max(store_emf_milligauss), 1)
-   
-        # Obtain the current location from the GPS sensor
-        # GPGGA, time, latitude, longitude, fix quality, number of satellites, horizontal dilution of precision, altitude, height of geoid above WGS84 ellipsoid, time since last DGPS update, DGPS reference station id, checksum
-        #logging.log("Reading the GPS data") 
-        #gps_data = ser.readline()
-        #if gps_data[0:6] == '$GPGGA':
-        #    msg = pynmea2.parse(gps_data)
-        #    latitude = str(msg.latitude)
-        #    longitude = str(msg.longitude)
-
-        # TODO: Remove this when the GPS module is integrated
-        latitude = 25.000000
-        longitude = -71.000000
+ 
+        # Obtain the latitude and longitude from the GPS sensor
+        latitude, longitude = gps.get_latitude_longitude()
 
         # This will pull from the Real Time Clock so it can be accurate
         # when there isn't an internet connection. See the readme for
