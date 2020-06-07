@@ -1,5 +1,6 @@
 import datetime
 import emf
+import gps
 import logger as logging
 import math
 import os
@@ -10,10 +11,10 @@ import sys
 import time
 
 # How often the sensor readings should be logged
-LOG_INTERVAL = 15 # seconds
+LOG_INTERVAL = 4#15 # seconds
 
 # How often readings should be taken to form the average that will be logged
-ACCUMULATION_INTERVAL = 3 # seconds
+ACCUMULATION_INTERVAL = 2 # seconds
 
 # Create a new file named by the current date and time
 time_name = datetime.datetime.now().strftime("%m-%d-%Y--%H-%M-%S")
