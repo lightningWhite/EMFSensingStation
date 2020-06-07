@@ -31,23 +31,26 @@ sed -i '/exit/d' /etc/rc.local
 printf 'echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device\nhwclock -s\nexit 0' >> /etc/rc.local
 
 echo "Configuring the Pi for the GPS sensor:"
-echo ""
-echo "Disabling Bluetooth and enabling UART"
-echo "" >> /boot/config.txt
-echo "dtparam=spi=on" >> /boot/config.txt
-echo "dtoverlay=pi3-disable-bt" >> /boot/config.txt
-echo "force_turbo=1" >> /boot/config.txt
-echo "core_freq=250" >> /boot/config.txt
-echo "enable_uart=1" >> /boot/config.txt
+# https://raspberrypi.stackexchange.com/questions/104403/configuration-uart-on-pi-4
+# I don't think I want to do the stuff below. I think it messes up the Pi.
 
-# TODO: Find out what this line needs to be. Currently it
-#       causes the Pi to not be able to start up correctly.
-#echo "dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles" > /boot/cmdline.txt
-
-sudo systemctl stop serial-getty@ttyS0.service
-sudo systemctl disable serial-getty@ttyS0.service
-# TODO: This may need to be run after a reboot
-#sudo systemctl enable serial-getty@ttyAMA0.service
+#echo ""
+#echo "Disabling Bluetooth and enabling UART"
+#echo "" >> /boot/config.txt
+#echo "dtparam=spi=on" >> /boot/config.txt
+#echo "dtoverlay=pi3-disable-bt" >> /boot/config.txt
+#echo "force_turbo=1" >> /boot/config.txt
+#echo "core_freq=250" >> /boot/config.txt
+#echo "enable_uart=1" >> /boot/config.txt
+#
+## TODO: Find out what this line needs to be. Currently it
+##       causes the Pi to not be able to start up correctly.
+##echo "dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles" > /boot/cmdline.txt
+#
+#sudo systemctl stop serial-getty@ttyS0.service
+#sudo systemctl disable serial-getty@ttyS0.service
+## TODO: This may need to be run after a reboot
+##sudo systemctl enable serial-getty@ttyAMA0.service
 
 echo ""
 
