@@ -41,8 +41,16 @@ installation. This was all tested with the Buster version of Raspbian.
 TODO: Verify if this is needed
 In order to use the I2C and SPI interfaces, these have to be enabled. This can
 be done by running `sudo raspi-config` and enabling I2C and SPI in the
-`Interfacing Options`. A reboot is required for these to be fully enabled. This
-can be done by running `sudo reboot`.
+`Interfacing Options`.
+
+Also, since the GPS module requires serial communication,
+this has to be enabled. To do this in `raspi-config`, select Interfacing
+Options and then select `Serial`. When it asks "Would you like a login shell to
+be accessible over serial?" select "No". Then when it asks "Would you like the
+serial port hardware to be enabled?" select "Yes".
+
+A reboot is required for these changes to be fully enabled. This can be done by
+running `sudo reboot`.
 
 ### Real Time Clock
 
