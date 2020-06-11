@@ -5,3 +5,4 @@
 #RPi.GPIO==0.7.0
 #smbus2==0.3.0
 pynmea2==1.15.0
+pyserial==3.4

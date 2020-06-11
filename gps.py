@@ -12,6 +12,8 @@ import serial
 import pynmea2
 import logger
 
+# TODO: Remove this when done testing
+logger.initialize_logger(f"/home/pi/EMFSensingStation/logs/test.log")
 
 # Set up the GPS serial port connection
 logger.log("Setting up the GPS module serial communication")
@@ -25,19 +27,31 @@ def get_latitude_longitude():
     Obtain and return the current latitude and longitude.
     """
 
+    latitude = 0.0
+    longitude = 0.0
+
     # Obtain the current location from the GPS sensor
     logger.log("Reading the GPS data") 
-    gps_data = ser.readline()
-    if gps_data[0:6] == '$GPGGA':
-        msg = pynmea2.parse(gps_data)
-        latitude = str(msg.latitude)
-        longitude = str(msg.longitude)
-    
-    return latitude, longitude
+
+    while True:
+        # ERROR: UnicodeDecodeError: 'utf-8' codec can't decode byte 0xfa in position 1: invalid start byte
+        gps_data = ser.readline().decode("utf-8")
+        if gps_data[0:6] == b'$GPGGA':
+            msg = pynmea2.parse(gps_data)
+            print("THE MESSAGE:\n\n")
+            print(msg)
+            print("")
+            latitude = str(msg.latitude)
+            longitude = str(msg.longitude)
+        
+            return latitude, longitude
 
 
 import time
+
+
 while True:
-    print(get_latitude_longitude())
-    time.sleep(1)
+    latitude, longitude = get_latitude_longitude()
+    print(f"Latitude: {latitude}")
+    print(f"Longitude: {longitude}")
 
