@@ -446,7 +446,50 @@ will be logged. The ACCUMULATION_INTERVAL defines how often samples should be
 taken of some of the sensors in order to calculate and averages or maximums.
 The ACCUMULATION_INTERVAL should be less than the LOG_INTERVAL.
 
-#### EMF-390
+#### gps.py
+
+This file is written to interface with the GT-U7 module to obtain GPS
+information. The information of interest for this application is the
+GPGGA NMEA data. This consists of the following fields:
+
+* GPGGA - the message type
+* timestamp - UTC time in hours, minutes, and seconds
+* latitude - in DDMM.MMMMM format. Decimal places are variable
+* latitude direction
+* longitude - in DDMM.MMMMM format
+* longitude direction
+* fix quality
+* number of satellites used in the coordinate
+* horizontal dilution of precision
+* altitude of the antenna
+* units of altitude
+* height of geoid above WGS84 ellipsoid
+* units used by the geoid separation
+* age of the correction (if any)
+* correction station id (if any)
+* checksum
+
+The gps.py file has a function named `get_latitude_longitude()` that reads the
+GPS string and parses out the latitude and longitude from it. Those values
+are then returned.
+
+Ensure the following connections:
+
+GND of the GPS sensor to GND on the Pi
+VCC of the GPS sensor to 3v3 on the Pi
+RX of the GPS sensor to BCM 14 on the Pi
+TX of the GPS sensor to BCM 15 on the Pi
+
+Also ensure that serial is enabled on the Pi.
+
+#### logging.py
+
+This file provides logging functionality. A path to the log file location is
+passed to the intialize_logger function and then messages can then be logged
+by calling the log function and passing a message. The message will be logged
+with the current time.
+
+#### EMF-390 Sensor
 
 A command line interface tool has been written that allows the Raspberry Pi
 to perform real-time logging of the readings from the EMF-390 sensor. This
@@ -536,13 +579,6 @@ Although there are some discrepancies between the values obtained from the
 emf390cli tool, these discrepancies are mitigated in the `emf_station.py`
 file by collecting values and then reporting averages and maximums rather than
 simply reporting each of the values directly reported by the tool.
-
-#### logging.py
-
-This file provides logging functionality. A path to the log file location is
-passed to the intialize_logger function and then messages can then be logged
-by calling the log function and passing a message. The message will be logged
-with the current time.
 
 ### Board Assembly Notes
 
