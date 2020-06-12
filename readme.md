@@ -215,6 +215,9 @@ Log messages are written to stdout and should capture most of the problems that
 may arise while the EMF sensing station is running. This can assist in
 debugging.
 
+Note that a cold start of the GPS (when it first starts up) may require several
+minutes before valid GPS coordinates are obtained.
+
 ## Data Logging
 
 As the EMF station runs, it will log readings from the EMF sensor and GPS
