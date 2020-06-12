@@ -11,7 +11,7 @@ import sys
 import time
 
 # How often the sensor readings should be logged
-LOG_INTERVAL = 4#15 # seconds
+LOG_INTERVAL = 10 # seconds
 
 # How often readings should be taken to form the average that will be logged
 ACCUMULATION_INTERVAL = 2 # seconds
