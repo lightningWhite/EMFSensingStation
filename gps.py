@@ -77,11 +77,9 @@ def get_latitude_longitude():
             logging.log("An exception was thrown while obtaining the GPS data. Continuing.")
             continue
 
-import time
-
-
-while True:
-    latitude, longitude = get_latitude_longitude()
-    print(f"Latitude: {latitude}")
-    print(f"Longitude: {longitude}")
+# Uncomment the lines below for testing this module alone
+#while True:
+#    latitude, longitude = get_latitude_longitude()
+#    print(f"Latitude: {latitude}")
+#    print(f"Longitude: {longitude}")
 
