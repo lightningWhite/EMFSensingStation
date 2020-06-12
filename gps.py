@@ -33,8 +33,8 @@ import serial
 import pynmea2
 import logger
 
-# TODO: Remove this when done testing
-logger.initialize_logger("/home/pi/EMFSensingStation/logs/test.log")
+# Uncomment this line when testing this module alone
+# logger.initialize_logger("/home/pi/EMFSensingStation/logs/test.log")
 
 # Set up the GPS serial port connection
 logger.log("Setting up the GPS module serial communication")
