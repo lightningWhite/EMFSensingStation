@@ -58,7 +58,9 @@ The Raspberry Pi can't keep accurate time when it's disconnected from the
 internet. For this reason, we use a Real Time Clock (RTC) module. We've
 chosen to use the ChronoDot 2.1. Note that the `install.sh` script will
 configure the Pi to use the Real Time Clock. For completeness, the steps
-performed are documented below.
+performed are documented below. **However**, the only step that the `install.sh`
+script does not do is set Real Time Clock's time. **This must be done for it
+to be accurate.**
 
 The following location provides a nice tutorial for setting up the Raspberry Pi
 to use the RTC:
@@ -478,10 +480,10 @@ are then returned.
 
 Ensure the following connections:
 
-GND of the GPS sensor to GND on the Pi
-VCC of the GPS sensor to 3v3 on the Pi
-RX of the GPS sensor to BCM 14 on the Pi
-TX of the GPS sensor to BCM 15 on the Pi
+* GND of the GPS sensor to GND on the Pi
+* VCC of the GPS sensor to 3v3 on the Pi
+* RX of the GPS sensor to BCM 14 on the Pi
+* TX of the GPS sensor to BCM 15 on the Pi
 
 Also ensure that serial is enabled on the Pi.
 
