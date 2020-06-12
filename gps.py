@@ -37,7 +37,6 @@ import logger
 # logger.initialize_logger("/home/pi/EMFSensingStation/logs/test.log")
 
 # Set up the GPS serial port connection
-logger.log("Setting up the GPS module serial communication")
 port = "/dev/serial0"
 ser = serial.Serial(port, baudrate=9600, timeout=0.5)
 dataout = pynmea2.NMEAStreamReader()
