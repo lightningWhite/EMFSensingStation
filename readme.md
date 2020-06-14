@@ -482,8 +482,8 @@ Ensure the following connections:
 
 * GND of the GPS sensor to GND on the Pi
 * VCC of the GPS sensor to 3v3 on the Pi
-* RX of the GPS sensor to BCM 14 on the Pi
-* TX of the GPS sensor to BCM 15 on the Pi
+* RX of the GPS sensor to BCM 14 (TX) on the Pi
+* TX of the GPS sensor to BCM 15 (RX) on the Pi
 
 Also ensure that serial is enabled on the Pi.
 
