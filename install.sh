@@ -29,6 +29,8 @@ echo "Configuring the Pi to synchronize with the Real Time Clock..."
 sed -i '/exit/d' /etc/rc.local
 # Place the following at the end of the file followed by exit 0
 printf 'echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device\nhwclock -s\nexit 0' >> /etc/rc.local
+echo "Ensure that the Real Time Clock's time is set correctly. This should be performed manually."
+echo "It can be done with 'sudo hwclock -w' while the clock is connected and the 'date' command reports the correct time."
 
 echo ""
 
