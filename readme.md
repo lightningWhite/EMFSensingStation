@@ -560,15 +560,39 @@ the sensor may be different for each reading reported in the output. This is not
 ideal. They should not contradict each other. One or the other reading could be
 taken and then converted to the other form if it's desirable to have both.
 
-I believe that the power density value obtained from the sensor is calculated
-using this formula: Power Density = (Pout * Gain) / (4 * PI * Distance^2)
+I'm not sure what equation is being used for calculating the power density.
+According to (Wikipedia)[https://en.wikipedia.org/wiki/Surface_power_density],
+the equation for surface power density is the following:
 
-The gain used by the sensor for the antennae is 10 (configurable in the sensor
-settings, but the forum recommends to leave it at 10 unless using some sort of
-external antenna). The distance can be calculated when D when a Power Density
-is reported, however, this distance seems to change for different readings, so
-it's unclear what's being used for the distance in the equation. Pout is
-probably the rfwatts reading.
+```
+Pd (Watts/meter2) = E x H (Volts/meter x Amperes/meter)
+```
+
+And at far field, the ratio between E and H becomes a fixed constant of 377
+ohms, making the following two equations applicable as well:
+
+```
+Pd = H^2 x 377 Ohms
+Pd = E^2 / 377 Ohms
+```
+
+However, using these equations and the readings from the sensor don't seem to
+calculate the power density reported by the sensor.
+
+Additionally, in radar applications, there is a power density equation that is as
+follows, according to this
+(website)[https://www.pasternack.com/t-calculator-power-density.aspx]:
+
+```
+Power Density = (Pout * Gain) / (4 * PI * Distance^2)
+```
+
+The gain used by the EMF-390 sensor for the antennae is 10 (configurable in the
+sensor settings, but the forum recommends to leave it at 10 unless using some
+sort of external antenna). The distance can be calculated when D when a Power
+Density is reported, however, this distance seems to change for different
+readings, so it's unclear what's being used for the distance in the equation.
+Pout is probably the rfwatts reading.
 
 Since the gain and the distance (probably) is hard-coded, the power density is
 not the value of a tower or something. It is just a relative value at the
