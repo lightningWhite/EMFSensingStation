@@ -561,7 +561,7 @@ ideal. They should not contradict each other. One or the other reading could be
 taken and then converted to the other form if it's desirable to have both.
 
 I'm not sure what equation is being used for calculating the power density.
-According to (Wikipedia)[https://en.wikipedia.org/wiki/Surface_power_density],
+According to [Wikipedia](https://en.wikipedia.org/wiki/Surface_power_density),
 the equation for surface power density is the following:
 
 ```
@@ -581,7 +581,7 @@ calculate the power density reported by the sensor.
 
 Additionally, in radar applications, there is a power density equation that is as
 follows, according to this
-(website)[https://www.pasternack.com/t-calculator-power-density.aspx]:
+[website](https://www.pasternack.com/t-calculator-power-density.aspx):
 
 ```
 Power Density = (Pout * Gain) / (4 * PI * Distance^2)
