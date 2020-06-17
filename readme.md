@@ -565,7 +565,7 @@ According to [Wikipedia](https://en.wikipedia.org/wiki/Surface_power_density),
 the equation for surface power density is the following:
 
 ```
-Pd (Watts/meter2) = E x H (Volts/meter x Amperes/meter)
+Pd (Watts/meter^2) = E x H (Volts/meter x Amperes/meter)
 ```
 
 And at far field, the ratio between E and H becomes a fixed constant of 377
