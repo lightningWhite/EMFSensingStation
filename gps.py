@@ -34,7 +34,7 @@ import pynmea2
 import logger
 
 # Uncomment this line when testing this module alone
-# logger.initialize_logger("/home/pi/EMFSensingStation/logs/test.log")
+#logger.initialize_logger("/home/pi/EMFSensingStation/logs/test.log")
 
 # Set up the GPS serial port connection
 port = "/dev/serial0"
@@ -72,8 +72,8 @@ def get_latitude_longitude():
                 return latitude, longitude
 
         except Exception as e:
-            logging.log(str(e.args))
-            logging.log("An exception was thrown while obtaining the GPS data. Continuing.")
+            logger.log(str(e.args))
+            logger.log("An exception was thrown while obtaining the GPS data. Continuing.")
             continue
 
 # Uncomment the lines below for testing this module alone

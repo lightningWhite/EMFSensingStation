@@ -10,6 +10,7 @@ import subprocess
 import sys
 import time
 
+
 # How often the sensor readings should be logged
 LOG_INTERVAL = 10 # seconds
 
