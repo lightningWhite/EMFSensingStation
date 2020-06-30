@@ -7,6 +7,53 @@ data logging solution using a Raspberry Pi and the EMF-390 monitor. It will log
 the average EMF readings over a period of time along with the time and GPS
 latitude and longitude coordinates.
 
+## A Brief User's Guide
+
+Here are some brief points for common use of the EMFSensing Station:
+
+To start the EMFStation and begin logging the EMF and GPS readings, simply power
+on the Raspberry Pi with the EMF sensor plugged into one of the USB ports, the
+PiHAT securely on the GPIO pins, and an external storage device plugged
+into one of the USB drives. When the Pi turns on, it will automatically start
+the sensing station and begin logging the readings.
+
+When the Pi turns on, always ensure that the EMF sensor is in vertical mode.
+The device is in vertical mode when you can see the main screen is in portrait
+mode and divided into thirds displaying RF, EF, and EMF with a graph at the
+bottom simultaneously. If it is not in vertical mode when it turns on, change
+it to vertical mode and restart the Raspberry Pi to be sure that correct data
+collection will be happening. Having the EMF sensor in vertical mode is required
+for proper functionality of the EMF sensing station. For any questions about
+operating the EMF sensor, visit this website:
+
+https://www.gqelectronicsllc.com/GQ-EMF-360V2-380V2-390_UserGuide.pdf
+
+When the station turns on, the GPS sensor may take up to nine minutes to get its
+first lock on the four satellites required for accurate global positioning. This
+first start for the GPS is called its cold start. Until a lock is obtained, the
+GPS will report a position of 0.0 latitude and 0.0 longitude. Generally, it will
+take less than nine minutes to get a fix, but it depends on the strength of the
+GPS signals reaching the device. The GPS sensor, like all GPS sensors, may not
+work in-doors. You can know that the GPS has a fix and is reporting accurate
+coordinates when the red light on the GPS sensor begins flashing about once
+every second.
+
+While the EMFSensing station is running, it will gather readings ever two
+seconds and log the average of the readings every 10 seconds. It will be
+written to both the SD card and the external storage device plugged into the
+USB port. The data file will be named as the date and time of when the station
+was started. There will also be a file with the same name having a `.bak`
+appended to the name. This is simply a backup file incase the main data file
+gets corrupted when powering off the Pi.
+
+To retrieve the data, the Pi can be powered off and the external storage device
+can be disconnected from the Pi. The data can then be transferred to another
+computer for analysis. To begin logging again, simply plug the external storage
+device back into the Pi and turn the Pi back on following the same steps above.
+
+Additional documentation pertaining to the EMF Sensing station can be found
+below.
+
 ## Hardware
 
 Raspberry Pi 3 Model B Board
