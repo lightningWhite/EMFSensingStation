@@ -36,6 +36,10 @@ printf '/bin/bash -c "echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device
 echo "Ensure that the Real Time Clock's time is set correctly. This should be performed manually."
 echo "It can be done with 'sudo hwclock -w' while the clock is connected and the 'date' command reports the correct time."
 
+# Create the data and logs directory with the proper permissions
+mkdir -p /home/pi/EMFSensingStation/data /home/pi/EMFSensingStation/logs
+chown pi:pi /home/pi/EMFSensingStation/data /home/pi/EMFSensingStation/logs
+
 echo ""
 echo "The EMF sensing station has been installed!"
 echo "The Raspberry Pi must be restarted for the EMF sensing station to start automatically."
