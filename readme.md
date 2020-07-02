@@ -17,14 +17,20 @@ PiHAT securely on the GPIO pins, and an external storage device plugged
 into one of the USB drives. When the Pi turns on, it will automatically start
 the sensing station and begin logging the readings.
 
-When the Pi turns on, always ensure that the EMF sensor is in vertical mode.
-The device is in vertical mode when you can see the main screen is in portrait
-mode and divided into thirds displaying RF, EF, and EMF with a graph at the
-bottom simultaneously. If it is not in vertical mode when it turns on, change
-it to vertical mode and restart the Raspberry Pi to be sure that correct data
-collection will be happening. Having the EMF sensor in vertical mode is required
-for proper functionality of the EMF sensing station. For any questions about
-operating the EMF sensor, visit this website:
+When the Pi turns on, always ensure that the EMF sensor is in vertical mode
+showing the RF reading. The device is in the correct mode when you can see that
+the main screen is in portrait mode and divided into thirds by three horizontal
+lines. The top section should show the time (it's okay if it's the wrong time),
+the section below the time should be displaying RF, the next section should show
+a power density reading (probably in mW/m^2), and the bottom reading should show
+the peak density reading since the device was powered on. If it is not in
+vertical mode when it turns on, change it to vertical mode, press and hold the
+power button to turn off the device, then press and hold the power button to turn
+it back on. Then restart the Raspberry Pi to be sure that correct data collection
+will begin. The EMF sensor should start up in the same mode as when it was turned
+off in this manner. Having the EMF sensor in vertical mode is required for proper
+functionality of the EMF sensing station. For any questions about operating the
+EMF sensor, visit this documentation page:
 
 https://www.gqelectronicsllc.com/GQ-EMF-360V2-380V2-390_UserGuide.pdf
 
