@@ -60,6 +60,10 @@ device back into the Pi and turn the Pi back on following the same steps above.
 Additional documentation pertaining to the EMF Sensing station can be found
 below.
 
+As a side note, [this website](https://gpspointplotter.com/) can take a series
+of latitude and longitude coordinates and plot them on a map. It can be helpful
+to visualize the route of a logging session when in motion.
+
 ## Hardware
 
 Raspberry Pi 3 Model B Board
