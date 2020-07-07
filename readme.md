@@ -40,9 +40,10 @@ first start for the GPS is called its cold start. Until a lock is obtained, the
 GPS will report a position of 0.0 latitude and 0.0 longitude. Generally, it will
 take less than nine minutes to get a fix, but it depends on the strength of the
 GPS signals reaching the device. The GPS sensor, like all GPS sensors, may not
-work in-doors. You can know that the GPS has a fix and is reporting accurate
-coordinates when the red light on the GPS sensor begins flashing about once
-every second.
+work in-doors. It also may not work very well inside of a vehicle. You can know
+that the GPS has a fix and is reporting accurate coordinates when the red light
+on the GPS sensor begins flashing about once every second consistently for a
+little while.
 
 While the EMFSensing station is running, it will gather readings ever two
 seconds and log the average of the readings every 10 seconds. It will be
