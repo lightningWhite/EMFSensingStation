@@ -685,3 +685,11 @@ outside of the waterproof junction box for better receptivity.
 make sure you have the Pi off and start it after it's connected. Also, remember
 to follow the set up instructions near the top of this readme to configure and 
 set the Real Time Clock.
+
+## TODOs
+
+* The logs need to be rotated. They grow to be much larger than the actual
+data and are never removed.
+* The logs need to be written to the external storage device if it is connected.
+This will allow an operator to see a problem if they don't have access to
+the SD card or if it gets corrupted.
