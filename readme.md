@@ -695,4 +695,5 @@ outside of the waterproof junction box for better receptivity.
 make sure you have the Pi off and start it after it's connected. Also, remember
 to follow the set up instructions near the top of this readme to configure and 
 set the Real Time Clock.
-
+* Use the pin connections defined in this readme and in the source files for
+how everything should be connected.
