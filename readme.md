@@ -1,5 +1,7 @@
 # EMF Sensing Station
 
+![EMF Sensing Station](../images/IMG_20200702_195046.jpg)
+
 ## Overview
 
 The object of this project is to create an Electromagnetic Frequency sensing and
