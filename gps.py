@@ -47,14 +47,23 @@ def get_latitude_longitude():
     Obtain and return the current latitude and longitude.
     """
 
+    MAX_ATTEMPTS = 40
+    # Suppress the log messages if it throws repeatedly the same message
+    log_suppression = False
+    log_suppression_msg_printed = False
+
     latitude = 0.0
     longitude = 0.0
 
     # Obtain the current location from the GPS sensor
     logger.log("Reading the GPS data") 
 
+    attempt_count = 0
     while True:
-
+        attempt_count = attempt_count + 1
+        # Exit early if the GPS sensor isn't reporting anything
+        if attempt_count > MAX_ATTEMPTS:
+            return latitude, longitude
         try:
             # Read the serial stream from the GPS sensor
             gps_data = ser.readline()
@@ -71,9 +80,18 @@ def get_latitude_longitude():
 
                 return latitude, longitude
 
+            # Disable the log suppression because it didn't throw
+            log_suppression = False
+            log_suppression_msg_printed = False
+
         except Exception as e:
-            logger.log(str(e.args))
-            logger.log("An exception was thrown while obtaining the GPS data. Continuing.")
+            if not log_suppression:
+                logger.log(str(e.args))
+                logger.log("An exception was thrown while obtaining the GPS data. Continuing.")
+                log_suppression = True
+            elif log_suppression and not log_suppression_msg_printed:
+                logger.log("----------Temporarily supressing the above gps exception message since it is occurring repeatedly----------")
+                log_suppression_msg_printed = True
             continue
 
 # Uncomment the lines below for testing this module alone

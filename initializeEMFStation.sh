@@ -7,4 +7,4 @@ echo '. /home/pi/EMFSensingStation/initializeEMFStation.sh'
 
 echo 'Sourcing the python virtual environment...'
 source /home/pi/EMFSensingStation/env/bin/activate
-
+echo 'Done.'
