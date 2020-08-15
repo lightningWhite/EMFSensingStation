@@ -1,6 +1,6 @@
 # EMF Sensing Station
 
-![EMF Sensing Station](../images/IMG_20200702_195046.jpg)
+![EMF Sensing Station](./images/IMG_20200702_195046.jpg)
 
 ## Overview
 
@@ -699,3 +699,6 @@ to follow the set up instructions near the top of this readme to configure and
 set the Real Time Clock.
 * Use the pin connections defined in this readme and in the source files for
 how everything should be connected.
+
+![Pi-HAT Assembled Board](./images/IMG_20200702_195057.jpg)
+![Pi-HAT Assembled Board Closer View](./images/IMG_20200702_195109.jpg)
