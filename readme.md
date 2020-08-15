@@ -47,11 +47,11 @@ little while.
 
 While the EMFSensing station is running, it will gather readings ever two
 seconds and log the average of the readings every 10 seconds. It will be
-written to both the SD card and the external storage device plugged into the
-USB port. The data file will be named as the date and time of when the station
-was started. There will also be a file with the same name having a `.bak`
-appended to the name. This is simply a backup file incase the main data file
-gets corrupted when powering off the Pi.
+written to an external storage device if one is plugged in. If one is not
+connected to the Pi, the data will be written to the SD card at
+`/home/pi/EMFSensingStation/data/<date--time>.csv`. The data file will be named 
+as the date and time of when the station was started in the format of
+`YYYY-MM-DD--HH-MM-SS.csv`. 
 
 To retrieve the data, the Pi can be powered off and the external storage device
 can be disconnected from the Pi. The data can then be transferred to another
@@ -94,7 +94,8 @@ This project is set up to handle the following sensors:
 ## Raspberry Pi Configuration
 
 This works well with the [NOOBS Raspbian OS](https://www.raspberrypi.org/downloads/noobs/)
-installation. This was all tested with the Buster version of Raspbian.
+installation. This was all tested with the Buster version of Raspbian on a
+Raspberry Pi 4.
 
 TODO: Verify if this is needed
 In order to use the I2C and SPI interfaces, these have to be enabled. This can
@@ -256,11 +257,13 @@ This makes it so the ssh session can time out or be terminated and the EMF
 station process will remain running. Using tmux also allows the user to attach
 to the session at any time and view the real-time output of the program.
 
-After the `startEMFStation.sh` script has been executed, you can attach to
-the process and view the output in real-time by typing `tmux attach`. To detach
-from the session again so it can continue running when the ssh session times
-out or you log out from it, type `Ctrl+b` and then `d`. This will put it in the
-background to continue running.
+After the `startEMFStation.sh` script has been executed (this must be run with
+sudo for it to access /dev/serial0 where the GPS data is streamed: 
+sudo ./startEMFStation.sh), you can attach to the process and view the output
+in real-time by typing `tmux attach`. To detach from the session again so it
+can continue running when the ssh session times out or you log out from it,
+type `Ctrl+b` and then `d`. This will put it in the background to continue
+running.
 
 Note that when the EMF station has been started automatically on boot,
 to view the real-time output of the EMF station, you must attach to the
@@ -385,7 +388,7 @@ pkg install openssh
 ```
 
 You can now ssh to the Raspberry Pi using the Pi's IP address if you're on
-the same network:
+the same network (192.168.0.23 as an example Pi IP address):
 
 ```
 ssh pi@192.168.0.23
@@ -404,7 +407,7 @@ Enter the Raspberry Pi's password and the file should be copied to the phone.
 The file should then be copied to the Downloads folder of the phone.
 
 If you want to copy all of the data files to your phone, you can do so using
-the wildcard such as this:
+scp like this:
 
 ```
 cd storage/downloads
@@ -641,7 +644,9 @@ Pd = E^2 / 377 Ohms
 ```
 
 However, using these equations and the readings from the sensor don't seem to
-calculate the power density reported by the sensor.
+calculate the power density reported by the sensor. After asking about this on
+the forum, the supplier indicated that the value is simply reported by the
+sensor, rather than using a formula to calculate it.
 
 Additionally, in radar applications, there is a power density equation that is as
 follows, according to this
@@ -691,10 +696,3 @@ make sure you have the Pi off and start it after it's connected. Also, remember
 to follow the set up instructions near the top of this readme to configure and 
 set the Real Time Clock.
 
-## TODOs
-
-* The logs need to be rotated. They grow to be much larger than the actual
-data and are never removed.
-* The logs need to be written to the external storage device if it is connected.
-This will allow an operator to see a problem if they don't have access to
-the SD card or if it gets corrupted.

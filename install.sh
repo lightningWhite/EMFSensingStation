@@ -1,16 +1,14 @@
 #!/bin/bash
 
 # This script sets up the Raspberry Pi to have the EMF sensing station start up
-# on boot.
+# on boot. It also performs all the necessary hardware configuration.
 
 echo ""
 echo "This script must be run as root."
 echo ""
 
-echo "Copying startEMFStation.sh to /etc/init.d"
+echo "Copying startEMFStation.sh to /etc/init.d and enabling the EMF station to start on boot..."
 cp startEMFStation.sh /etc/init.d/
-
-echo "Enabling the EMF station to start on boot"
 update-rc.d startEMFStation.sh defaults
 
 echo "Creating /mnt/usb1 as a mount point for an external storage device..."
