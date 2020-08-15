@@ -277,7 +277,7 @@ try:
             print("Emptying the log file to conserve disk space")
             logging.log("Emptying the log file to conserve disk space")
             clear_log = subprocess.Popen(
-                f"rm {backup_file}",
+                f"rm {log_file}",
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT)
